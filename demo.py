@@ -25,10 +25,10 @@ class myExcel: # !_list_! contain Row Object
     def __init__(self, row ,str_column):
         self.rows = row
         self.columns = hash_function_alphabet(str_column) + 1
-        self.rows_list = list()             #list of row n rows
+        self.rows_list = list()                                 #list of row n rows
         for i in range(self.rows):
              self.rows_list.append(self.Row(self.columns))
-             for j in range(self.columns):  #init key to obj Class Row
+             for j in range(self.columns):                      #init key to obj Class Row
                  self.rows_list[i].keys[j] = (j+ord('A'),i+1)   #(j=0+65 = ord('A'))
 
     def get_row_index(self,index):
@@ -39,9 +39,9 @@ class myExcel: # !_list_! contain Row Object
         #-------------------------------print column label-------------------------------#
         for key in self.rows_list[0].keys:
                 if key[0]==ord('A') :
-                    print(f"_,{alphabet_index_map[key[0]][1]}",end="")
+                    print(f"_,{alphabet_index_map[key[0]][1]}",end="") #key[0] == 65 -> ord('A')=65
                 else :
-                    print(f",{alphabet_index_map[key[0]][1]}",end="") #key[0] == 65 -> ord('A')=65
+                    print(f",{alphabet_index_map[key[0]][1]}",end="") 
         print()
         #----------------------------------row of values------------------------------------#
         for r in self.rows_list:
@@ -50,17 +50,17 @@ class myExcel: # !_list_! contain Row Object
                 if (r.keys[i][0]) == ord('A'):
                     print(f"{r.keys[i][1]},{r.values[i]}",end="") #r.keys[i][1] get number row only first of column
                 else:
-                    print(f",{r.values[i]}",end="") #r.values[i] get value
+                    print(f",{r.values[i]}",end="")               #r.values[i] get value
             print()
         #------------------------------------------------------------------------------------#
 
     def insert_value(self, cell, value): #cell -> A1:String
         # print(cell,value)
         Ncol,Nrow = cell[0],cell[1] # A,1
-        Nrow = int(Nrow)
+        Nrow = int(Nrow)                     #index of row is Nrow-1
         this_row = self.get_row_index(Nrow-1)
-        index = hash_function_alphabet(Ncol)
-        this_row.keys[index] = (ord(Ncol), Nrow) #key ==> 
+        index = hash_function_alphabet(Ncol) #index of column is hash_function(Ncol) 
+        this_row.keys[index] = (ord(Ncol), Nrow)
         # print(this_row.keys[index])
         this_row.values[index] = value
         # print(this_row.values[index])
