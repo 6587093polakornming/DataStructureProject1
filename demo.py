@@ -16,6 +16,7 @@ alphabet_index_map ={
 }
 
 class myExcel: # !_list_! contain Row Object
+#---------------------------------------------------------------------------#
     class Row: # like hash-table  have key,value 
         def __init__(self,numCol):
             self.numCol = numCol            #key [index] = col 0-... -> correspond alphabet 
@@ -65,7 +66,7 @@ class myExcel: # !_list_! contain Row Object
         this_row.values[index] = value
         # print(this_row.values[index])
 
-    def get_value(self,cell):
+    def get_value(self,cell:str):
         Ncol,Nrow = cell[0],cell[1] #A1
         index = hash_function_alphabet(Ncol) 
         return self.rows_list[int(Nrow)-1].values[index]
@@ -84,6 +85,8 @@ if __name__ == '__main__':
     testcase1.insert_value("B2",10)
     testcase1.insert_value("C2","=9*B2")
     testcase1.insert_value("A3","=A1+A2")
-    testcase1.insert_value("B3","B1+B2")
+    testcase1.insert_value("B3","=B1+B2")
     testcase1.display_formula()
     # print(testcase1.get_value("A1"))
+    print(testcase1.get_value("C2"))
+    # print(testcase1.get_value("D4"))
