@@ -64,6 +64,11 @@ class myExcel: # !_list_! contain Row Object
         # print(this_row.keys[index])
         this_row.values[index] = value
         # print(this_row.values[index])
+
+    def get_value(self,cell):
+        Ncol,Nrow = cell[0],cell[1] #A1
+        index = hash_function_alphabet(Ncol) 
+        return self.rows_list[int(Nrow)-1].values[index]
     
 def hash_function_alphabet(char):
     char = ord(char)
@@ -81,3 +86,4 @@ if __name__ == '__main__':
     testcase1.insert_value("A3","=A1+A2")
     testcase1.insert_value("B3","B1+B2")
     testcase1.display_formula()
+    # print(testcase1.get_value("A1"))
