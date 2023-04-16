@@ -12,9 +12,7 @@ class myExcel: # !_list_! contain Row Object
             self.numCol = numCol            #key [index] = col 0-... -> correspond index column
             self.keys = [None] * (numCol)   #Ex(A1,A2) each row have m column -> tuple (ord(char), number row)
             self.values = [None] * (numCol) #value can contain int or string
-
-        def get_keys(self):
-            return self.keys
+            
     #---------------------------------------------------------------------------#
     def __init__(self, row ,str_column): #3C
         self.rows = row
@@ -48,16 +46,10 @@ class myExcel: # !_list_! contain Row Object
                 for i in range(self.columns):
                     # print(r.keys[i][0])
                     if (r.keys[i][0]) == ord('A'):
-                        if r.values[i] is None:
-                            text = ""
-                        else: 
-                            text = r.values[i]
+                        text = r.values[i]
                         print(f"{r.keys[i][1]}   {text:<7}",end="") #r.keys[i][1] get number row only first of column
                     else:
-                        if r.values[i] is None:
-                            text = ""
-                        else: 
-                            text = r.values[i]
+                        text = r.values[i]
                         print(f"{text:<7}",end="")               #r.values[i] get value
                 print()
             #------------------------------------------------------------------------------------#
@@ -73,21 +65,17 @@ class myExcel: # !_list_! contain Row Object
                         print(f"{chr(key[0]):<7}",end="")  #use chr(ord(char)) - > to convert int to string
             print()
             #----------------------------------row of values------------------------------------#
+            now_row = 0
             for r in self.rows_list:
                 for i in range(self.columns):
                     # print(r.keys[i][0])
                     if (r.keys[i][0]) == ord('A'):
-                        if r.values[i] is None:
-                            value = ""
-                        else:
-                            value = r.values[i]
-                        print(f"{r.keys[i][1]}   {compute_value(value,self,i,r.keys[i][0]):<7}",end="") #r.keys[i][1] get number row only first of column
+                        value = r.values[i]
+                        print(f"{r.keys[i][1]}   {compute_value(value,self,r.keys[i][1],r.keys[i][0]):<7}",end="") #r.keys[i][1] get number row only first of column
                     else:
-                        if r.values[i] is None:
-                            value = ""
-                        else:
-                            value = r.values[i]
-                        print(f"{compute_value(value,self,i,r.keys[i][0]):<7}",end="")               #r.values[i] get value
+                        value = r.values[i]
+                        print(f"{compute_value(value,self,r.keys[i][1],r.keys[i][0]):<7}",end="")               #r.values[i] get value
+                    
                 print()
         #-------------------------------------------display method-------------------------------------------------#
 
@@ -98,14 +86,13 @@ class myExcel: # !_list_! contain Row Object
         this_row = self.get_row(int(Nrow)-1) #index of row is Nrow-1
         index = hash_function_alphabet(Ncol) #index of column is hash_function(Ncol) 
         this_row.keys[index] = (ord(Ncol), Nrow)
-        # print(this_row.keys[index])
+
         if "."in str(value) and "=" not in str(value):
             this_row.values[index] = float(value)
         elif str(value).isnumeric():
             this_row.values[index] = int(value)
         else:
             this_row.values[index] = value
-        # print(this_row.values[index])
 
     def get_value(self,cell:str):#A 1
         input = (cell.split())
@@ -120,21 +107,6 @@ class ExpTree:
         self.data = data
         self.left = left
         self.right = right
-
-    def breadthfirst_with_level(self): #use for check
-        queue = []
-        queue.append(self)
-        while queue:
-            count = len(queue)
-            while count > 0:
-                p:ExpTree = queue.pop(0)
-                print(p.data, end=" ")
-                if p.left:
-                    queue.append(p.left)
-                if p.right:
-                    queue.append(p.right)
-                count = count - 1
-            print(' ')
     #-----------------------------------------------------------------------------#
     def calculation(self,Excel:myExcel):
         if self is None or self.data is None:
@@ -155,24 +127,6 @@ class ExpTree:
         else:  
             return compute_value(self.data,Excel)
     #------------------------------------------------------------------------------#
-    def inorder(self):      #use for check
-        if self.data is None:
-            return
-        if self.left is not None:
-            self.left.inorder()
-        print(self.data ,end=" ")
-        if self.right is not None:
-            self.right.inorder()
-
-    def postorder(self):   #use for check
-        if self.data is None:
-            return
-        if self.left is not None:
-            self.left.inorder()
-        if self.right is not None:
-            self.right.inorder()
-        print(self.data ,end=" ")
-
 def build_exptree(expr_list):
    # citaion :https://replit.com/@65-2-itds122/Lab-8-Expression by Aj.ดร. ศิริเพ็ญ พงษ์ไพเชฐ
     stack = deque()
@@ -215,16 +169,6 @@ def make_list_from_string(string):
     return out
 #------------------------------------------------------------Tree------------------------------------------------------------------------------#
 #-------------------------------------------------------Check_Cell_Valid
-def check_circular(Excel:myExcel): #not use
-    g = Graph(Excel)
-    g = g.build_graph(Excel)
-    for row in Excel.rows_list:
-        i = 0
-        for cell in row.values:
-            vertax = str(chr(row.keys[i][0]))+" "+str(row.keys[i][1])
-            if g.is_Cycle(vertax):
-                return True
-            i+=1
 def matching_paren(string): #'value'
     #citation:Ananta Srisuphab
     stack = []
@@ -241,14 +185,14 @@ def matching_paren(string): #'value'
     return not stack
 
 def is_outOfRange(Excel:myExcel,check): #check:'A 1'
-    col,row = str(check).split()
+    col, row = str(check).split()
     if int(row) > Excel.rows:
         return True
     if hash_function_alphabet(col) + 1 > Excel.columns:
         return True
     return False
 
-
+#is_cycle is method from Graph
 #------------------------------------------------------------Graph------------------------------------------------------------------------------#
 class Graph:
     def __init__(self,Excel:myExcel):
@@ -258,44 +202,47 @@ class Graph:
 
     def  build_graph(self,Excel:myExcel):
         for row in Excel.rows_list:
-            i = 0
-            for cell in row.values:
-                if len(str(cell))>0 and str(cell)[0] == "=":
-                    value = str(cell)[1:]
+           
+            for i in range(self.column):
+                if len(str(row.values[i]))>0 and str(row.values[i])[0] == "=":
+                    value = str(row.values[i])[1:]
                     str_lst = make_list_from_string(value)
                     str_lst = fixNamecell(str_lst)
                     vertax = str(chr(row.keys[i][0]))+" "+str(row.keys[i][1])
-                    self.edges[vertax] = [string for string in str_lst if string[0].isalpha()]
+                    EndVertax = []
+                    for string in str_lst:
+                        if  string[0].isalpha() and (string not in EndVertax):
+                            EndVertax.append(string)
+                    self.edges[vertax] = EndVertax
                 else:
                     vertax = str(chr(row.keys[i][0]))+" "+str(row.keys[i][1])
                     self.edges[vertax] = []
-                i+=1
         return self
     
     def __str__ (self):
         return str(self.edges)
     
-    def is_Cycle(self, root,Excel:myExcel):
+    def is_Cycle(self, root):
         visited_nodes = []
         nodes_queue = [root] #adja from root
         while nodes_queue:
             ver = nodes_queue.pop(0) #dequeue ver=vertax 'A 1'
+            if ver not in self.edges.keys():
+                return True
             visited_nodes.append(ver) #put in visted
             breath_first = []
             for v in self.edges[ver]:
-                if root == v:
-                    # print(root)
-                    # print(v)
+                if (root == v) or (v in visited_nodes):
                     return True
                 else:
-                    if (v not in visited_nodes) and (v not in nodes_queue):
+                    if (v not in visited_nodes) and (v not in nodes_queue):#and (v in self.edges.keys())
                         breath_first.append(v)
                 nodes_queue.extend(breath_first)
         return False
 
 
 #-------------------------------------------------------------function--------------------------------------------------------------------------#
-def compute_value(value,Excel:myExcel,row=1,col=1):#row i->0 , col -> A index 0
+def compute_value(value,Excel:myExcel,row=-1,col=-1):#row i->0 , col -> A index 0
     if len(str(value))>0 and str(value)[0] == "=":
         value = str(value)[1:]
         if not matching_paren(str(value)):
@@ -309,15 +256,15 @@ def compute_value(value,Excel:myExcel,row=1,col=1):#row i->0 , col -> A index 0
             
         G = Graph(Excel)
         G = G.build_graph(Excel)
-        now_vertax = str(chr(col))+" "+str(row+1)
-        if G.is_Cycle(now_vertax,Excel): #self, root 'A 1'
-            return 'ERORR'
+        if (row!=-1 and col!=-1):
+            now_vertax = str(chr(col))+" "+str(row)
+            if  (G.is_Cycle(now_vertax)): #self, root 'A 1'
+                return f'ERORR'
 
         postfix = infixToPostfix(str_lst)
         out_tree = build_exptree(postfix)
         value = out_tree.calculation(Excel)
         return value
-    
     else:
         if "."in str(value):
             return float(value)

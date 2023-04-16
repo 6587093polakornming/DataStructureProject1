@@ -8,10 +8,10 @@ def printMenu():
         print(f"{'5.display formula & value' :>10}")
         print(f"{'6.exit program' :>10}")
         print(f"{'--------------' :>10}")
-
+nullExcel = None
+nullGraph = None
 
 if __name__ == '__main__':
-            nullExcel = None
             print(f"{'Welcome to myExcel' :^10}")
             print(f"{'version 3.0' :^10}")
             print()
@@ -49,7 +49,7 @@ if __name__ == '__main__':
                                     value = input(f"{'Value of this cell: ':>10}")
                                     nullExcel.insert_value(cellName,value)
                                     os.system('cls')
-                                    print(cellName,value,"was add to your excel")
+                                    print(cellName,value,"was add to your excel\n")
                     elif opt == 3:
                           nullExcel.display_formula()
                           input("Please enter")
@@ -69,6 +69,6 @@ if __name__ == '__main__':
 
                 except Exception as ex:
                     print(ex)
-                    print("unknown ERROR is deteched")
+                    print("ERROR is deteched")
                     input("Please try again")
                     continue
