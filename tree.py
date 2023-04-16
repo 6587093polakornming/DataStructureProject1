@@ -1,4 +1,4 @@
-import re, demo
+import re, libary
 from collections import deque
 
 class ExpTree:
@@ -45,7 +45,7 @@ class ExpTree:
             elif self.data == "/":
                 return self.left.calculation() / self.right.calculation()
                 
-        return demo.compute_value(self.data)
+        return libary.compute_value(self.data)
     #----------------------------incomplete-----------------------------------#
 
     def inorder(self):
