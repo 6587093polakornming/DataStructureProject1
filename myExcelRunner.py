@@ -51,7 +51,7 @@ if __name__ == '__main__':
                                           value = input(f"{'Value of this cell: ':>10}")
                                           nullExcel.insert_value(cellName,value)
                                           os.system('cls')
-                                          print(cellName,value,"was add to your excel\n")
+                                          print(cellName,"value:",value,"was add to your excel\n")
                                           
                                 except Exception as e:
                                       print(e)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
                     elif opt == 5:
                           if nullExcel == 0:
                               raise TypeError("Excel is not cretaed yet!")
-                          nullExcel.display_formula()
+                          nullExcel.display_formula();print()
                           nullExcel.display_value()
                           input("Please enter")
                     elif opt == 6:
