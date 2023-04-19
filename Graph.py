@@ -1,12 +1,12 @@
-import libary
-from libary import fixNamecell,make_list_from_string
+import myExcelLibary as lib
+from myExcelLibary import fixNamecell,make_list_from_string
 class Graph:
-    def __init__(self,Excel:libary.myExcel):
+    def __init__(self,Excel:lib.myExcel):
         self.edges = dict()
         self.row = Excel.rows
         self.column = Excel.columns
 
-    def  build_graph(self,Excel:libary.myExcel):
+    def  build_graph(self,Excel:lib.myExcel):
         for row in Excel.rows_list:
             i = 0
             for cell in row.values:
@@ -46,7 +46,7 @@ class Graph:
                 nodes_queue.extend(breath_first)
         return visited_nodes
 #------------------------Unused--------------------#
-def check_circular(Excel:libary.myExcel):
+def check_circular(Excel:lib.myExcel):
     g = Graph(Excel)
     g = g.build_graph(Excel)
     for row in Excel.rows_list:
@@ -58,7 +58,7 @@ def check_circular(Excel:libary.myExcel):
             i+=1
 
 if __name__ == '__main__':
-    testcase1 = libary.myExcel(3,'C')
+    testcase1 = lib.myExcel(3,'C')
     testcase1.insert_value("A1","=A2+3")
     testcase1.insert_value("A2","=A1+2")
     testcase1.insert_value("C1",3)
