@@ -1,4 +1,4 @@
-import myExcelLibary as lib
+import myExcelLibrary as lib
 def report_test():
     print(f"""is_pass_0 ,{is_pass_0}
 is_pass_1 ,{is_pass_1}

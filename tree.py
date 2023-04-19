@@ -1,4 +1,4 @@
-import re, libary
+import re, myExcelLibrary as lib
 from collections import deque
 
 class ExpTree:
@@ -45,7 +45,7 @@ class ExpTree:
             elif self.data == "/":
                 return self.left.calculation() / self.right.calculation()
                 
-        return libary.compute_value(self.data)
+        return lib.compute_value(self.data)
     #----------------------------incomplete-----------------------------------#
 
     def inorder(self):
