@@ -79,7 +79,8 @@ class myExcel: # !_list_! contain Row Object
                         print(f"{r.keys[i][1]}   {compute_value(value,self,r.keys[i][1],r.keys[i][0],G):^7}",end="") #r.keys[i][1] get number row only first of column
                     else:
                         value = r.values[i]
-                        print(f"{compute_value(value,self,r.keys[i][1],r.keys[i][0],G):^7}",end="")                  #r.values[i] get value
+                        print(f"{compute_value(value,self,r.keys[i][1],r.keys[i][0],G):^7}",end="")               #r.values[i] get value
+                    
                 print()
         #-------------------------------------------display method-------------------------------------------------#
 
@@ -91,16 +92,15 @@ class myExcel: # !_list_! contain Row Object
 
         if "."in str(value) and "=" not in str(value):
             this_row.values[index] = float(value)
-        elif str(value).strip("-").isnumeric():
+        elif str(value).isnumeric():
             this_row.values[index] = int(value)
         else:
             if "=" not in value:
                 value = "="+str(value)
                 print("Missing \"=\"")
-                input("Please enter to fix")
             this_row.values[index] = value
 
-    def convert_valueOfCell(self,cell:str):#A 1
+    def convert_value(self,cell:str):#A 1
         input = (cell.split())
         Ncol,Nrow = input[0],input[1]#A 1
         index = hash_function_alphabet(Ncol) 
@@ -127,7 +127,7 @@ class ExpTree:
             elif self.data == "/":
                 return self.left.calculation(Excel) / self.right.calculation(Excel)
         if (self.data is not None) and ((self.data[0]).isalpha()):
-            return Excel.convert_valueOfCell(self.data)
+            return Excel.convert_value(self.data)
         else:  
             return compute_value(self.data,Excel)
     #------------------------------------------------------------------------------#
@@ -240,6 +240,7 @@ class Graph:
                 nodes_queue.extend(breath_first)
         return False
 
+
 #-------------------------------------------------------------function--------------------------------------------------------------------------#
 def compute_value(value,Excel:myExcel,row=-1,col=-1,graph:Graph=None):#row i->0 , col -> A index 0
     if len(str(value))>0 and str(value)[0] == "=":
@@ -265,7 +266,7 @@ def compute_value(value,Excel:myExcel,row=-1,col=-1,graph:Graph=None):#row i->0 
     else:
         if "."in str(value):
             return float(value)
-        elif str(value).strip("-").isnumeric():
+        elif str(value).isnumeric():
             return int(value)
         else:   #รองรับกรณีนอกเหนือจากนั้น
             return value

@@ -1,6 +1,5 @@
 import myExcelLibary as lib
-import os,re
-from collections import deque
+import os
 def printMenu():
         print(f"{'--------------------MENU--------------------' :^45}")
         print(f"{'1.Create Excel size' :<30} {'2.insert and upadte value' :<30}")
@@ -12,8 +11,7 @@ nullExcel = 0
 nullGraph = 0
 
 if __name__ == '__main__':
-            os.system('cls')
-            print(f"\n{'Welcome to myExcel' :^10}")
+            print(f"{'Welcome to myExcel' :^10}")
             print(f"{'version 3.0' :^10}\n")
             print("Copyright@ by Polakorn Anantapakorn ICT student year1 2023")
             input("Please enter")
@@ -38,7 +36,7 @@ if __name__ == '__main__':
                               
                           #nullExcel.insert_value('A1',"=A2+3")
                           print(f"\n{'to insert value input :cell(Name) and value(decimal,formula)':>10}")
-                          print(f"\n{'ex.Cell Name     => A1 ':>10}")
+                          print(f"\n{'ex.CellName      => A1 ':>10}")
                           print(f"{'ex.Value Of Cell => 11, 22.2 , =A3+3 ':>10}")
                           print(f"{'type CellName = q  exit from insert value menu' :>10}\n")
                           while True:

@@ -5,13 +5,11 @@ is_pass_1 ,{is_pass_1}
 is_pass_2 ,{is_pass_2}
 is_pass_3 ,{is_pass_3}
 is_pass_4 ,{is_pass_4}
-is_pass_5 ,{is_pass_5}
-is_pass_6 ,{is_pass_6}
-""")
+is_pass_5 ,{is_pass_5}""")
 
 if __name__ == '__main__':
         #try:
-        is_pass_0 = False;is_pass_1 = False;is_pass_2=False;is_pass_3=False;is_pass_4=False;is_pass_5=False;is_pass_6=False
+        is_pass_0 = False;is_pass_1 = False;is_pass_2=False;is_pass_3=False;is_pass_4=False;is_pass_5=False
         #--------------testcase 0------------------#
         testcase0 = lib.myExcel(1,'A')
         testcase0.display_formula()
@@ -115,23 +113,6 @@ if __name__ == '__main__':
         testcase5.display_formula()
         testcase5.display_value()
         is_pass_5 = True
-        print("testcase5 pass")
-        report_test()
-
-        testcase6 = lib.myExcel(3,'C')
-        testcase6.insert_value('A1',"-1.5")
-        testcase6.insert_value('A2',"-5")
-        testcase6.insert_value('A3',"0")
-        testcase6.insert_value('B1',"-3")
-        testcase6.insert_value('B2',"-10.5")
-        testcase6.insert_value('B3',"-4")
-        testcase6.insert_value('C1',"=A2*B1")
-        testcase6.insert_value('C2',"=B1+B2")
-        testcase6.insert_value('C3',"=B1-B3")
-        testcase6.display_formula()
-        testcase6.display_value()
-        is_pass_6 = True
-        print("testcase6 pass")
         report_test()
         #except Exception as e:
         #    print(e)
