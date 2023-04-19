@@ -1,7 +1,7 @@
 #Name: Polakorn Anantapakorn
 #ID: 6587093
 #SEC: 1
-#status level of program == medium
+#status level of program == high
 from collections import deque
 import re
 #------------------------------------------dequeue(matrix) contain hashtable(row)----------------------------------------------#
@@ -14,19 +14,23 @@ class myExcel: # !_list_! contain Row Object
             self.values = [None] * (numCol) #value can contain int or string
             
     #---------------------------------------------------------------------------#
-    def __init__(self, row ,str_column): #3C
+    def __init__(self, row:int ,str_column:str): #3C
         self.rows = row
         self.columns = hash_function_alphabet(str_column) + 1
         self.rows_list = deque()                         #list of row n rows
         for i in range(self.rows):
              self.rows_list.append(self.Row(self.columns))
              for j in range(self.columns):                      #init key to obj Class Row
-                 self.rows_list[i].keys[j] = (j+ord('A'),i+1)   #(j=0+65 = ord('A'))
-                 self.rows_list[i].values[j] = 0
-
+                 self.rows_list[i].keys[j] = (j+ord('A'), i+1)   #(j=0+65 = ord('A'))
+                 self.rows_list[i].values[j] = 0                 #default value = 0
+    
+    #tool for check , not use method
     def get_row(self,index):
          return self.rows_list[index]
-    # def get_cell(self,row,col): #row col -> index('A',1)
+    def get_value_cell(self,rowIndex,colIndex): #row col ex. [A 1 -> 0 0], [B 2 -> 1 1]
+        return self.rows_list[rowIndex].values[colIndex]
+    def get_key_cell(self,rowIndex,colIndex):   #row col ex. [A 1 -> 0 0], [B 2 -> 1 1]
+        return self.rows_list[rowIndex].keys[colIndex]
     
      #-------------------------------------------display method-------------------------------------------------#
     def display_formula(self):
@@ -37,9 +41,9 @@ class myExcel: # !_list_! contain Row Object
             for key in self.rows_list[0].keys:
                     text = chr(key[0])
                     if key[0]==ord('A') :
-                        print(f"_   {text:<7}",end="") #key[0] == 65 -> ord('A')=65
+                        print(f"_   {text:^7}",end="") #key[0] == 65 -> ord('A')=65
                     else :
-                        print(f"{text:<7}",end="")     #use chr(ord(char)) - > to convert int to string
+                        print(f"{text:^7}",end="")     #use chr(ord(char)) - > to convert int to string
             print()
             #----------------------------------row of values------------------------------------#
             for r in self.rows_list:
@@ -47,44 +51,43 @@ class myExcel: # !_list_! contain Row Object
                     # print(r.keys[i][0])
                     if (r.keys[i][0]) == ord('A'):
                         text = r.values[i]
-                        print(f"{r.keys[i][1]}   {text:<7}",end="") #r.keys[i][1] get number row only first of column
+                        print(f"{r.keys[i][1]}   {text:^7}",end="") #r.keys[i][1] get number row only first of column
                     else:
                         text = r.values[i]
-                        print(f"{text:<7}",end="")               #r.values[i] get value
+                        print(f"{text:^7}",end="")               #r.values[i] get value
                 print()
             #------------------------------------------------------------------------------------#
     def display_value(self): #should add Alignment
+        G = Graph(self)
+        G = G.build_graph(self)
         if self.rows == 0:print("Empty")
         else:
             print("Display value")
             #-------------------------------print column label-------------------------------#
             for key in self.rows_list[0].keys:
                     if key[0]==ord('A') :                     #use aligment {chr(key[0]):<7} add left 7 gap
-                        print(f"_   {chr(key[0]):<7}",end="") #key[0] == 65 -> ord('A')=65 
+                        print(f"_   {chr(key[0]):^7}",end="") #key[0] == 65 -> ord('A')=65 
                     else :
-                        print(f"{chr(key[0]):<7}",end="")  #use chr(ord(char)) - > to convert int to string
+                        print(f"{chr(key[0]):^7}",end="")  #use chr(ord(char)) - > to convert int to string
             print()
             #----------------------------------row of values------------------------------------#
-            now_row = 0
             for r in self.rows_list:
                 for i in range(self.columns):
                     # print(r.keys[i][0])
                     if (r.keys[i][0]) == ord('A'):
                         value = r.values[i]
-                        print(f"{r.keys[i][1]}   {compute_value(value,self,r.keys[i][1],r.keys[i][0]):<7}",end="") #r.keys[i][1] get number row only first of column
+                        print(f"{r.keys[i][1]}   {compute_value(value,self,r.keys[i][1],r.keys[i][0],G):^7}",end="") #r.keys[i][1] get number row only first of column
                     else:
                         value = r.values[i]
-                        print(f"{compute_value(value,self,r.keys[i][1],r.keys[i][0]):<7}",end="")               #r.values[i] get value
+                        print(f"{compute_value(value,self,r.keys[i][1],r.keys[i][0],G):^7}",end="")               #r.values[i] get value
                     
                 print()
         #-------------------------------------------display method-------------------------------------------------#
 
     def insert_value(self, cell:str, value): #cell -> A1:String
-        out = re.findall(r'[A-Za-z]+|\d*\.\d+|\d+|\W', cell)
-        cell = (fixNamecell(out))[1].split()                              #!!! not complete
-        Ncol,Nrow = cell[0],cell[1]          # A,1
-        this_row = self.get_row(int(Nrow)-1) #index of row is Nrow-1
-        index = hash_function_alphabet(Ncol) #index of column is hash_function(Ncol) 
+        Ncol,Nrow = cell[0], cell[1:]          # A,1
+        this_row = self.rows_list[(int(Nrow)-1)] #index of row is Nrow-1
+        index = hash_function_alphabet(Ncol) #index of column is hash_function(Ncol)
         this_row.keys[index] = (ord(Ncol), Nrow)
 
         if "."in str(value) and "=" not in str(value):
@@ -92,9 +95,12 @@ class myExcel: # !_list_! contain Row Object
         elif str(value).isnumeric():
             this_row.values[index] = int(value)
         else:
+            if "=" not in value:
+                value = "="+str(value)
+                print("Missing \"=\"")
             this_row.values[index] = value
 
-    def get_value(self,cell:str):#A 1
+    def convert_value(self,cell:str):#A 1
         input = (cell.split())
         Ncol,Nrow = input[0],input[1]#A 1
         index = hash_function_alphabet(Ncol) 
@@ -111,7 +117,6 @@ class ExpTree:
     def calculation(self,Excel:myExcel):
         if self is None or self.data is None:
             return #empty tree return None
-
         if (self.data in "+-*/") and (self.left or self.right) : #root node 
             if self.data == "+": 
                 return self.left.calculation(Excel) + self.right.calculation(Excel)
@@ -122,8 +127,7 @@ class ExpTree:
             elif self.data == "/":
                 return self.left.calculation(Excel) / self.right.calculation(Excel)
         if (self.data is not None) and ((self.data[0]).isalpha()):
-            out = Excel.get_value(self.data)
-            return out
+            return Excel.convert_value(self.data)
         else:  
             return compute_value(self.data,Excel)
     #------------------------------------------------------------------------------#
@@ -146,7 +150,6 @@ def infixToPostfix(string_list):
     priority = {'+':1, '-':1, '*':2, '/':2} #high value mean have high priority
     stack = deque()
     output = deque()
-
     for node in string_list:
         if node not in operators:
             output.append(node)
@@ -186,13 +189,11 @@ def matching_paren(string): #'value'
 
 def is_outOfRange(Excel:myExcel,check): #check:'A 1'
     col, row = str(check).split()
-    if int(row) > Excel.rows:
-        return True
-    if hash_function_alphabet(col) + 1 > Excel.columns:
+    if (int(row) > Excel.rows) or (hash_function_alphabet(col) + 1 > Excel.columns):
         return True
     return False
 
-#is_cycle is method from Graph
+#is_cycle is one of method to check valid from Graph 
 #------------------------------------------------------------Graph------------------------------------------------------------------------------#
 class Graph:
     def __init__(self,Excel:myExcel):
@@ -202,9 +203,8 @@ class Graph:
 
     def  build_graph(self,Excel:myExcel):
         for row in Excel.rows_list:
-           
             for i in range(self.column):
-                if len(str(row.values[i]))>0 and str(row.values[i])[0] == "=":
+                if len(str(row.values[i]))>0 and ("=" in str(row.values[i])):
                     value = str(row.values[i])[1:]
                     str_lst = make_list_from_string(value)
                     str_lst = fixNamecell(str_lst)
@@ -242,27 +242,25 @@ class Graph:
 
 
 #-------------------------------------------------------------function--------------------------------------------------------------------------#
-def compute_value(value,Excel:myExcel,row=-1,col=-1):#row i->0 , col -> A index 0
+def compute_value(value,Excel:myExcel,row=-1,col=-1,graph:Graph=None):#row i->0 , col -> A index 0
     if len(str(value))>0 and str(value)[0] == "=":
-        value = str(value)[1:]
-        if not matching_paren(str(value)):
+        value = str(value).strip("=")
+        if not matching_paren(str(value)): #check matching parentheses
             return 'ERROR'
 
-        str_lst = make_list_from_string(value)
+        str_lst = make_list_from_string(value) 
         str_lst = fixNamecell(str_lst)
         for string in str_lst:
-            if string[0].isalpha() and is_outOfRange(Excel,string):
+            if string[0].isalpha() and is_outOfRange(Excel,string): #check is out of range Excel
                 return 'ERORR'
             
-        G = Graph(Excel)
-        G = G.build_graph(Excel)
         if (row!=-1 and col!=-1):
-            now_vertax = str(chr(col))+" "+str(row)
-            if  (G.is_Cycle(now_vertax)): #self, root 'A 1'
-                return f'ERORR'
+            now_vertax = str(chr(col))+" "+str(row) #check that cell had circular reference (have cycle)
+            if  (graph.is_Cycle(now_vertax)): #self, root 'A 1' 
+                return 'ERORR'
 
         postfix = infixToPostfix(str_lst)
-        out_tree = build_exptree(postfix)
+        out_tree:ExpTree = build_exptree(postfix)
         value = out_tree.calculation(Excel)
         return value
     else:
@@ -270,7 +268,7 @@ def compute_value(value,Excel:myExcel,row=-1,col=-1):#row i->0 , col -> A index 
             return float(value)
         elif str(value).isnumeric():
             return int(value)
-        else:
+        else:   #รองรับกรณีนอกเหนือจากนั้น
             return value
     
 def hash_function_alphabet(char):

@@ -1,21 +1,19 @@
-import libary,os
+import myExcelLibary as lib
+import os
 def printMenu():
-        print(f"{'-----MENU-----' :>10}")
-        print(f"{'1.Create Excel size' :>10}")
-        print(f"{'2.insert and upadte value' :>10}")
-        print(f"{'3.display formula' :>10}")
-        print(f"{'4.display value' :>10}")
-        print(f"{'5.display formula & value' :>10}")
-        print(f"{'6.exit program' :>10}")
-        print(f"{'--------------' :>10}")
-nullExcel = None
-nullGraph = None
+        print(f"{'--------------------MENU--------------------' :^45}")
+        print(f"{'1.Create Excel size' :<30} {'2.insert and upadte value' :<30}")
+        print(f"{'3.display formula' :<30} {'4.display value' :<30}")
+        print(f"{'5.display formula & value':<30} {'6.exit program':<30}")
+        print(f"{'--------------------------------------------' :^45}")
+
+nullExcel = 0
+nullGraph = 0
 
 if __name__ == '__main__':
             print(f"{'Welcome to myExcel' :^10}")
-            print(f"{'version 3.0' :^10}")
-            print()
-            print("Copyright@ Made by Polakorn Anantapakorn ICT student year1 2023")
+            print(f"{'version 3.0' :^10}\n")
+            print("Copyright@ by Polakorn Anantapakorn ICT student year1 2023")
             input("Please enter")
 
             while True:
@@ -28,40 +26,54 @@ if __name__ == '__main__':
                           print()
                           row_num = int(input(f"{'input row size (ex. 3, 12) :':>10}"))
                           char = str(input(f"{'input char size (ex. A , B) : ':>10}")).upper()
-                          nullExcel = libary.myExcel(row_num,char)
+                          nullExcel = lib.myExcel(row_num,char)
                           print(f"Excel size {row_num} x {char} is created")
+                          nullExcel.display_formula()
                           input("please enter")
                     elif opt == 2:
-                          if nullExcel == None:
-                              raise "Excel is not cretaed yet!"
+                          if nullExcel == 0:
+                              raise TypeError("Excel is not cretaed yet!")
+                              
                           #nullExcel.insert_value('A1',"=A2+3")
-                          print(f"{'to insert value input :cell(Name) and value(decimal,formula)':>10}")
-                          print(f"{'ex. CellName => A1 | value => =A2+3 , 10.5 , 20':>10}")
-                          print(f"{'type CellName = q  go back to menu' :>10}")
-                          print()
+                          print(f"\n{'to insert value input :cell(Name) and value(decimal,formula)':>10}")
+                          print(f"\n{'ex.CellName      => A1 ':>10}")
+                          print(f"{'ex.Value Of Cell => 11, 22.2 , =A3+3 ':>10}")
+                          print(f"{'type CellName = q  exit from insert value menu' :>10}\n")
                           while True:
                                 nullExcel.display_formula()
-                                cellName = input(f"{'cellName: ':>10}")
-                                if cellName == 'q':
-                                      break
-                                else:
-                                    #testcase4.insert_value('A1',"=A2+3")
-                                    value = input(f"{'Value of this cell: ':>10}")
-                                    nullExcel.insert_value(cellName,value)
-                                    os.system('cls')
-                                    print(cellName,value,"was add to your excel\n")
+                                try:
+                                    cellName = input(f"{'cellName: ':>10}")
+                                    if cellName == 'q':
+                                          break
+                                    else:
+                                          value = input(f"{'Value of this cell: ':>10}")
+                                          nullExcel.insert_value(cellName,value)
+                                          os.system('cls')
+                                          print(cellName,value,"was add to your excel\n")
+                                          
+                                except Exception as e:
+                                      print(e)
+                                      print("input cell Error")
+                                      print("Please try again")
+                                      continue
                     elif opt == 3:
+                          if nullExcel == 0:
+                              raise TypeError("Excel is not cretaed yet!")
                           nullExcel.display_formula()
                           input("Please enter")
                     elif opt == 4:
+                          if nullExcel == 0:
+                              raise TypeError("Excel is not cretaed yet!")
                           nullExcel.display_value()
                           input("Please enter")
                     elif opt == 5:
+                          if nullExcel == 0:
+                              raise TypeError("Excel is not cretaed yet!")
                           nullExcel.display_formula()
                           nullExcel.display_value()
                           input("Please enter")
                     elif opt == 6:
-                          print("Goodbye please enter to shutdown program")
+                          print("Goodbye shutdown program")
                           exit()
                     else:
                           print("Please select opt 1-7")
