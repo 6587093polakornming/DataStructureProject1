@@ -14,7 +14,7 @@ nullGraph = 0
 if __name__ == '__main__':
             os.system('cls')
             print(f"\n{'Welcome to myExcel' :^10}")
-            print(f"{'version 3.0' :^10}\n")
+            print(f"{'version 3.3' :^10}\n")
             print("Copyright@ by Polakorn Anantapakorn ICT student year1 2023")
             input("Please enter")
 
