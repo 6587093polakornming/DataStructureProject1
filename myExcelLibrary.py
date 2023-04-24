@@ -23,7 +23,6 @@ class myExcel: # !_list_! contain Row Object
              for j in range(self.columns):                      #init key to obj Class Row
                  self.rows_list[i].keys[j] = (j+ord('A'), i+1)   #(j=0+65 = ord('A'))
                  self.rows_list[i].values[j] = 0                 #default value = 0
-    
     #tool for check , not use method
     def get_row(self,index):
          return self.rows_list[index]
@@ -103,7 +102,7 @@ class myExcel: # !_list_! contain Row Object
     def convert_valueOfCell(self,cell:str):#A 1
         input = (cell.split())
         Ncol,Nrow = input[0],input[1]#A 1
-        index = hash_function_alphabet(Ncol) 
+        index = hash_function_alphabet(Ncol)
         return compute_value(self.rows_list[int(Nrow)-1].values[index],self)
 #------------------------------------------dequeue(matrix) contain hashtable(row)----------------------------------------------#
 
@@ -136,8 +135,8 @@ def build_exptree(expr_list):
     stack = deque()
     for term in expr_list:
         if term in "+-*/":
-            right=stack.pop()
-            left =stack.pop()
+            right = stack.pop()
+            left  = stack.pop()
             node = ExpTree(term, left, right)
         else:
             node = ExpTree(term)
@@ -170,6 +169,8 @@ def infixToPostfix(string_list):
 def make_list_from_string(string):
     out = re.findall(r'[A-Za-z]+|\d*\.\d+|\d+|\W', string)
     return out
+        #input: "=A1+1.2"
+        #output: ['=', 'A', '1', '+', '1.2']
 #------------------------------------------------------------Tree------------------------------------------------------------------------------#
 #-------------------------------------------------------Check_Cell_Valid
 def matching_paren(string): #'value'
@@ -242,37 +243,39 @@ class Graph:
 
 #-------------------------------------------------------------function--------------------------------------------------------------------------#
 def compute_value(value,Excel:myExcel,row=-1,col=-1,graph:Graph=None):#row i->0 , col -> A index 0
-    if len(str(value))>0 and str(value)[0] == "=":
-        value = str(value).strip("=")
-        if not matching_paren(str(value)): #check matching parentheses
-            return 'ERROR'
+    try:
+        if len(str(value))>0 and str(value)[0] == "=":
+            value = str(value).strip("=")
+            if not matching_paren(str(value)): #check matching parentheses
+                return 'ERROR'
 
-        str_lst = make_list_from_string(value) 
-        str_lst = fixNamecell(str_lst)
-        for string in str_lst:
-            if string[0].isalpha() and is_outOfRange(Excel,string): #check is out of range Excel
-                return 'ERORR'
-            
-        if (row!=-1 and col!=-1):
-            now_vertax = str(chr(col))+" "+str(row) #check that cell had circular reference (have cycle)
-            if  (graph.is_Cycle(now_vertax)): #self, root 'A 1' 
-                return 'ERORR'
+            str_lst = make_list_from_string(value) 
+            str_lst = fixNamecell(str_lst)
+            for string in str_lst:
+                if string[0].isalpha() and is_outOfRange(Excel,string): #check is out of range Excel
+                    return 'ERORR'
+                
+            if (row!=-1 and col!=-1):
+                now_vertax = str(chr(col))+" "+str(row) #check that cell had circular reference (have cycle)
+                if  (graph.is_Cycle(now_vertax)): #self, root 'A 1' 
+                    return 'ERORR'
 
-        postfix = infixToPostfix(str_lst)
-        out_tree:ExpTree = build_exptree(postfix)
-        value = out_tree.calculation(Excel)
-        return value
-    else:
-        if "."in str(value):
-            return float(value)
-        elif str(value).strip("-").isnumeric():
-            return int(value)
-        else:   #รองรับกรณีนอกเหนือจากนั้น
+            postfix = infixToPostfix(str_lst)
+            out_tree:ExpTree = build_exptree(postfix)
+            value = out_tree.calculation(Excel)
             return value
+        else:
+            if "."in str(value):
+                return float(value)
+            elif str(value).strip("-").isnumeric():
+                return int(value)
+            else:   #รองรับกรณีนอกเหนือจากนั้น
+                return value
+    except:
+        return "Unknown Error"
     
 def hash_function_alphabet(char):
     return ord(char) - ord('A') #return index
-
 def fixNamecell(stringlist:list):
     out=list()
     stringlist.insert(0,"(");stringlist.append(")")

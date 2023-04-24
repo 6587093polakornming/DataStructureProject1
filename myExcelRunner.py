@@ -14,7 +14,7 @@ nullGraph = 0
 if __name__ == '__main__':
             os.system('cls')
             print(f"\n{'Welcome to myExcel' :^10}")
-            print(f"{'version 3.3.1' :^10}\n")
+            print(f"{'version 3.3.3' :^10}\n")
             print("Copyright@ by Polakorn Anantapakorn ICT student year1 2023")
             input("Please enter")
 
@@ -24,7 +24,9 @@ if __name__ == '__main__':
                     printMenu()
                     opt = int(input(f"{'please select an option: ' :^10}"))
                     if opt == 1:
-                          print(f"{'input row size x column size (ex. 3C)':>10}")
+                          print(f"{'input row size x column size (ex.)':>10}")
+                          print("3")
+                          print("C")
                           print()
                           row_num = int(input(f"{'input row size (ex. 3, 12) :':>10}"))
                           char = str(input(f"{'input char size (ex. A , B) : ':>10}")).upper()
