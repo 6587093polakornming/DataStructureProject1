@@ -42,7 +42,7 @@ if __name__ == '__main__':
                           print(f"\n{'to insert value input :cell(Name) and value(decimal,formula)':>10}")
                           print(f"\n{'ex.Cell Name     => A1 ':>10}")
                           print(f"{'ex.Value Of Cell => 11, 22.2 , =A3+3 ':>10}")
-                          print(f"{'type CellName = q  exit from insert value menu' :>10}\n")
+                          print(f"type q in CellName for exit insert value menu\n")
                           while True:
                                 nullExcel.display_formula()
                                 try:
@@ -54,6 +54,7 @@ if __name__ == '__main__':
                                           nullExcel.insert_value(cellName,value)
                                           os.system('cls')
                                           print(cellName,"value:",value,"was add to your excel\n")
+                                          print(f"type q in CellName for exit insert value menu\n")
                                           
                                 except Exception as e:
                                       print(e)
